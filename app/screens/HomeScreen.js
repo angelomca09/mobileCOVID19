@@ -81,19 +81,9 @@ function Home(props) {
         help={props.help}
         action={props.action}
       />
-      <View style={styles.bottom}>
-        <View style={styles.imgBox}>
-          <Image
-            style={styles.img}
-            source={{
-              uri: 'https://cdn0.iconfinder.com/data/icons/virus-transmission-6/64/8-gel-512.png',
-            }}
-          />
-        </View>
-        <View style={styles.messageBox}>
-          <Text style={styles.message}>{props.message}</Text>
-        </View>
-      </View>
+      <Bottom
+        message={props.message}
+      />
     </View>
   );
 }
@@ -114,6 +104,26 @@ function Top(props) {
         <Text style={styles.help}>{props.help}</Text>
       </View>
     </TouchableOpacity>
+  );
+}
+
+function Bottom(props) {
+  return (
+    <View style={styles.bottom}>
+    {/*
+      <View style={styles.imgBox}>
+        <Image
+          style={styles.img}
+          source={{
+            uri: 'https://cdn0.iconfinder.com/data/icons/virus-transmission-6/64/8-gel-512.png',
+          }}
+        />
+      </View>
+      <View style={styles.messageBox}>
+        <Text style={styles.message}>{props.message}</Text>
+      </View>
+      */}
+    </View>
   );
 }
 
@@ -177,7 +187,6 @@ const styles = StyleSheet.create({
   bottom: {
     flex: 3,
     flexDirection: 'row',
-    backgroundColor: 'orange'
   },
   imgBox: {
     flex: 1,
