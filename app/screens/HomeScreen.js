@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Image, View, StyleSheet, Text, Alert, TouchableOpacity } from 'react-native';
+import { FlatList, Image, View, StyleSheet, Text, Alert, TouchableOpacity } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { getProfile } from '../services/api';
 import { getUserInformation } from '../services/api';
+import axios from 'axios';
 
 export default function HomeScreen({ navigation }) {
   const [user, setUser] = useState({});
+  const [cases, setCases] = useState({});
   const helpMessage = 'Responda o Quiz para ganhar pontos!';
   const messages = [
     'Lave sempre muito bem as mãos.',
@@ -37,8 +39,19 @@ export default function HomeScreen({ navigation }) {
     }
   }
 
+  function fetchCases() {
+    axios.get('https://api.covid19api.com/summary')
+      .then(res => {
+        setCases(res.data.Countries.find(x => x.CountryCode === 'BR'));
+      })
+      .catch(err => {
+        console.log('Error', err);
+      });
+  }
+
   useEffect(function () {
     findProfileInformation();
+    fetchCases();
   }, []);
 
   return (
@@ -47,6 +60,7 @@ export default function HomeScreen({ navigation }) {
         <HeaderProfile name={user.name} lastname={user.lastname} points={user.points} avatar={user.avatar} />
         <Home
           onClick={() => rotateMessages()}
+          info={cases}
           help={helpMessage}
           message={message}
           action={() => navigation.navigate("Quiz")}
@@ -82,7 +96,7 @@ function Home(props) {
         action={props.action}
       />
       <Bottom
-        message={props.message}
+        info={props.info}
       />
     </View>
   );
@@ -108,31 +122,71 @@ function Top(props) {
 }
 
 function Bottom(props) {
+  const data = [
+    { name: 'NewConfirmed', caption: 'novos confirmados' },
+    { name: 'TotalConfirmed', caption: 'total confirmados' },
+    { name: 'NewDeaths', caption: 'novas mortes' },
+    { name: 'TotalDeaths', caption: 'total mortes' },
+    { name: 'NewRecovered', caption: 'novos recuperados' },
+    { name: 'TotalRecovered', caption: 'total recuperados' },
+  ];
+  const date = new Date(props.info.Date).toLocaleDateString();
+
   return (
     <View style={styles.bottom}>
-    {/*
-      <View style={styles.imgBox}>
+      <View style={styles.bottomTitle}>
         <Image
           style={styles.img}
           source={{
-            uri: 'https://cdn0.iconfinder.com/data/icons/virus-transmission-6/64/8-gel-512.png',
+            uri: 'https://cdn0.iconfinder.com/data/icons/virus-transmission-6/64/1-virus-512.png'
           }}
         />
+        <View style={{ flex: 1 }} >
+          <Text style={styles.title}>Situação da pandemia do COVID-19 no Brasil</Text>
+        </View>
       </View>
-      <View style={styles.messageBox}>
-        <Text style={styles.message}>{props.message}</Text>
+      <View style={{ flex: 5 }}>
+        <Text style={styles.subtitle}>Atualizado em: {date}</Text>
+        <Text style={styles.subtitle}>Referência: covid19api</Text>
+        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+          <FlatList
+            numColumns={2}
+            data={data}
+            keyExtractor={item => item.name}
+            renderItem={({ item }) => {
+              return (
+                <View style={styles.casoBox}>
+                  <Text style={styles.casoValue}>{props.info[item.name]}</Text>
+                  <Text style={styles.casoCaption}>{item.caption}</Text>
+                </View>
+              );
+            }}
+          />
+        </View>
       </View>
-      */}
     </View>
   );
 }
 
 const darkPurple = '#6d17b0';
 const yellow = '#feee35';
+const white = '#fafafa';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fafafa'
+    backgroundColor: white
+  },
+  top: {
+    flex: 0.6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: darkPurple,
+    marginBottom: 30,
+  },
+  bottom: {
+    flex: 3,
   },
   header: {
     backgroundColor: darkPurple,
@@ -148,27 +202,20 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
   },
   heading: {
-    color: '#fafafa',
+    color: white,
     fontSize: 22,
+    paddingLeft: 5,
   },
   subHeading: {
     color: '#feee35',
     fontSize: 18,
     fontWeight: 'bold',
+    paddingLeft: 10,
   },
   home: {
     flex: 1,
     paddingVertical: 10,
     paddingHorizontal: 20,
-  },
-  top: {
-    flex: 0.6,
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: darkPurple,
-    marginBottom: 15,
   },
   infoImg: {
     height: 60,
@@ -184,30 +231,48 @@ const styles = StyleSheet.create({
     fontSize: 16,
     padding: 10,
   },
-  bottom: {
-    flex: 3,
+  bottomTitle: {
+    flex: 1,
     flexDirection: 'row',
-  },
-  imgBox: {
-    flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: yellow,
+    borderRadius: 10,
+    paddingHorizontal: 5,
   },
-  img: {
-    height: 100,
-    width: 100,
+  title: {
+    color: darkPurple,
+    fontSize: 22,
+    fontWeight: 'bold',
+    textAlign: 'left',
   },
-  messageBox: {
+  subtitle: {
+    color: 'black',
+    textAlign: 'right',
+    fontSize: 12,
+    marginBottom: -2,
+  },
+  casoBox: {
     flex: 1,
     justifyContent: 'center',
-  },
-  message: {
-    textAlign: 'center',
-    color: '#6d17b0',
-    fontSize: 22,
-    padding: 15,
     borderRadius: 15,
     borderWidth: 1,
-    borderColor: '#6d17b0',
+    borderColor: darkPurple,
+    paddingVertical: 15,
+    paddingHorizontal: 5,
+    margin: 5,
+  },
+  casoValue: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    paddingLeft: 10,
+  },
+  casoCaption: {
+    fontSize: 14,
+    paddingLeft: 10,
+  },
+  img: {
+    height: 50,
+    width: 50,
+    marginRight: 15,
   },
 });
