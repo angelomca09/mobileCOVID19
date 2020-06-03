@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Image, View, StyleSheet, Text, Alert } from 'react-native';
+import { Image, View, StyleSheet, Text, Alert, TouchableOpacity } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { getProfile } from '../services/api';
 import { getUserInformation } from '../services/api';
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
   const [user, setUser] = useState({});
+  const helpMessage = 'Responda o Quiz para ganhar pontos!';
   const messages = [
     'Lave sempre muito bem as mãos.',
     'Utilize álcool gel fora de casa.',
@@ -44,7 +45,12 @@ export default function HomeScreen() {
     <>
       <View style={styles.container}>
         <HeaderProfile name={user.name} lastname={user.lastname} points={user.points} avatar={user.avatar} />
-        <HomeCommon onClick={() => rotateMessages()} message={message} />
+        <Home
+          onClick={() => rotateMessages()}
+          help={helpMessage}
+          message={message}
+          action={() => navigation.navigate("Quiz")}
+        />
       </View>
     </>
   );
@@ -68,30 +74,58 @@ function HeaderProfile(props) {
   );
 }
 
-function HomeCommon(props) {
+function Home(props) {
   return (
-    <View style={styles.common}>
-      <View style={styles.logoBox}>
-        <Image
-          style={styles.logo}
-          source={{
-            uri: 'https://cdn0.iconfinder.com/data/icons/virus-transmission-6/64/8-gel-512.png',
-          }}
-        />
-      </View>
-      <View style={styles.messageBox}>
-        <Text style={styles.message}>{props.message}</Text>
+    <View style={styles.home}>
+      <Top
+        help={props.help}
+        action={props.action}
+      />
+      <View style={styles.bottom}>
+        <View style={styles.imgBox}>
+          <Image
+            style={styles.img}
+            source={{
+              uri: 'https://cdn0.iconfinder.com/data/icons/virus-transmission-6/64/8-gel-512.png',
+            }}
+          />
+        </View>
+        <View style={styles.messageBox}>
+          <Text style={styles.message}>{props.message}</Text>
+        </View>
       </View>
     </View>
-  )
+  );
 }
 
+function Top(props) {
+  return (
+    <TouchableOpacity
+      style={styles.top}
+      onPress={props.action}
+    >
+      <Image
+        style={styles.infoImg}
+        source={{
+          uri: 'https://cdn0.iconfinder.com/data/icons/virus-transmission-6/64/4-doctor-512.png'
+        }}
+      />
+      <View style={styles.helpBox}>
+        <Text style={styles.help}>{props.help}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+}
+
+const darkPurple = '#6d17b0';
+const yellow = '#feee35';
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#fafafa'
   },
   header: {
-    backgroundColor: '#6d17b0',
+    backgroundColor: darkPurple,
     flexDirection: 'row',
     paddingVertical: 20,
     paddingHorizontal: 40,
@@ -104,7 +138,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
   },
   heading: {
-    color: 'white',
+    color: '#fafafa',
     fontSize: 22,
   },
   subHeading: {
@@ -112,18 +146,45 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-  common: {
+  home: {
     flex: 1,
-    flexDirection: 'row',
-    paddingVertical: 20,
-    paddingHorizontal: 30,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
   },
-  logoBox: {
+  top: {
+    flex: 0.6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: darkPurple,
+    marginBottom: 15,
+  },
+  infoImg: {
+    height: 60,
+    width: 60,
+    marginLeft: 40,
+    marginRight: 10,
+  },
+  helpBox: {
+    flex: 2,
+  },
+  help: {
+    color: darkPurple,
+    fontSize: 16,
+    padding: 10,
+  },
+  bottom: {
+    flex: 3,
+    flexDirection: 'row',
+    backgroundColor: 'orange'
+  },
+  imgBox: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  logo: {
+  img: {
     height: 100,
     width: 100,
   },
@@ -140,8 +201,4 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#6d17b0',
   },
-  buttonBox: {
-    flex: 5,
-    padding: 50,
-  }
 });
