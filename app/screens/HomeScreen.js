@@ -1,54 +1,49 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text,Alert } from 'react-native';
-import { Avatar, Icon } from 'react-native-elements';
+import { Image, View, StyleSheet, Text, Alert } from 'react-native';
+import { Avatar } from 'react-native-elements';
 import { getProfile } from '../services/api';
 import { getUserInformation } from '../services/api';
 
-export default function MissionsScreen({ route, navigation })  {
-
-  const [user, setUser] = useState({})
-  const [messageIndex, setMessageIndex] = useState(0)
-
+export default function HomeScreen() {
+  const [user, setUser] = useState({});
   const messages = [
-    "Lave sempre muite bem as mãos.",
-    "Utilize álcool em gel fora de casa.",
-    "Tenha cuidado com os produtos em mercados."
-  ]
-
+    'Lave sempre muito bem as mãos.',
+    'Utilize álcool gel fora de casa.',
+    'Tenha cuidado com os produtos em mercados.'
+  ];
+  const [messageIndex, setMessageIndex] = useState(0);
+  const message = messages[messageIndex];
   const rotateMessages = function () {
     if (messageIndex + 1 >= messages.length) {
-      setMessageIndex(0)
-      return
+      setMessageIndex(0);
     }
-    setMessageIndex(messageIndex + 1)
+    setMessageIndex(messageIndex + 1);
   }
 
   async function findProfileInformation() {
     try {
+      let userinfo = await getUserInformation()
       let params = {
-        points : await getProfile(),
-        username : await getUserInformation(),
-        avatar: './assets/snack-icon.png'
+        points: await getProfile(),
+        name: userinfo.first_name,
+        lastname: userinfo.last_name,
+        avatar: require('../assets/images/snack-icon.png')
       }
-
-     setUser(params);
-
-
+      setUser(params);
     } catch (err) {
-        Alert.alert("Erro ao buscar profile")
-        console.log('Error', err)
+      Alert.alert('Erro ao buscar profile');
+      console.log('Error', err);
     }
-}
+  }
 
+  useEffect(function () {
+    findProfileInformation();
+  }, []);
 
-  const message = messages[messageIndex]
-
-  findProfileInformation()
-  
   return (
     <>
       <View style={styles.container}>
-        <HeaderProfile username={user.username} points={user.points} avatar={user.avatar} />
+        <HeaderProfile name={user.name} lastname={user.lastname} points={user.points} avatar={user.avatar} />
         <HomeCommon onClick={() => rotateMessages()} message={message} />
       </View>
     </>
@@ -59,18 +54,15 @@ function HeaderProfile(props) {
   return (
     <View style={styles.header}>
       <Avatar
-        size="large"
+        size='large'
         rounded
-        source={require('../assets/images/snack-icon.png')}
+        source={props.avatar}
       />
-      <View style={{ flexDirection: 'column' }}>
-        <Text style={styles.heading}>{props.username}</Text>
-        <View style={{ flexDirection: 'row', justifyContent: "center", marginVertical: 10 }}>
-          <Text style={styles.subHeading}>{props.points} pts</Text>
+      <View style={styles.profile}>
+        <Text style={styles.heading}>{props.name} {props.lastname}</Text>
+        <View>
+          <Text style={styles.subHeading}>{props.points} pontos</Text>
         </View>
-      </View>
-      <View style={{ justifyContent: "center" }}>
-        <Icon name='settings' color="#feee35" onPress={() => console.log('go to edit profile')}></Icon>
       </View>
     </View>
   );
@@ -79,11 +71,16 @@ function HeaderProfile(props) {
 function HomeCommon(props) {
   return (
     <View style={styles.common}>
+      <View style={styles.logoBox}>
+        <Image
+          style={styles.logo}
+          source={{
+            uri: 'https://cdn0.iconfinder.com/data/icons/virus-transmission-6/64/8-gel-512.png',
+          }}
+        />
+      </View>
       <View style={styles.messageBox}>
         <Text style={styles.message}>{props.message}</Text>
-      </View>
-      <View style={styles.buttonBox}>
-        <Icon name="search" size={200} onPress={props.onClick}></Icon>
       </View>
     </View>
   )
@@ -91,44 +88,60 @@ function HomeCommon(props) {
 
 const styles = StyleSheet.create({
   container: {
-    //this should change when we have a safearea policy
-    flex: 9
+    flex: 1
   },
   header: {
     backgroundColor: '#6d17b0',
-    justifyContent: 'space-between',
     flexDirection: 'row',
-    padding: 25,
-    flex: 1
+    paddingVertical: 20,
+    paddingHorizontal: 40,
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
+  },
+  profile: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingLeft: 15,
   },
   heading: {
     color: 'white',
-    fontSize: 20,
+    fontSize: 22,
   },
   subHeading: {
-    fontSize: 20,
+    color: '#feee35',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   common: {
-    flex: 6,
-    justifyContent: "space-between",
-    flexDirection: "column",
+    flex: 1,
+    flexDirection: 'row',
     paddingVertical: 20,
-    paddingHorizontal: 10
+    paddingHorizontal: 30,
+  },
+  logoBox: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logo: {
+    height: 100,
+    width: 100,
   },
   messageBox: {
     flex: 1,
-    borderRadius: 15,
-    borderWidth: 1,
-    borderColor: "#6d17b0",
-    justifyContent: "center"
+    justifyContent: 'center',
   },
   message: {
-    textAlign: "center",
-    color: "#6d17b0",
-    fontSize: 22
+    textAlign: 'center',
+    color: '#6d17b0',
+    fontSize: 22,
+    padding: 15,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: '#6d17b0',
   },
   buttonBox: {
     flex: 5,
-    padding: 50
+    padding: 50,
   }
 });

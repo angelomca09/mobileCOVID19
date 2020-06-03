@@ -51,7 +51,7 @@ export async function getUserInformation() {
     },
     }).then((response) => response.json())
     .then((json) => {
-      return json.results[0].first_name;
+      return json.results[0];
     })
     .catch((error) => {
       console.error(error);
