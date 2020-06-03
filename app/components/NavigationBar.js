@@ -7,22 +7,22 @@ export default function NavigationBar() {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.footer}>
-      <Appbar style={styles.bottom}>
-        <Appbar.Action
-          icon={require('../assets/images/iconRanking.png')}
-          onPress={() => navigation.navigate("Rank")}
-        />
-        <Appbar.Action
-          icon={require('../assets/images/iconHome.png')}
-          onPress={() => navigation.navigate("Home")}
-        />
-        <Appbar.Action
-          icon={require('../assets/images/iconQuiz.png')}
-          onPress={() => navigation.navigate("Quiz")}
-        />
-      </Appbar>
-    </View>
+    //<View style={styles.footer}>
+    <Appbar style={styles.bottom}>
+      <Appbar.Action
+        icon={require('../assets/images/iconQuiz.png')}
+        onPress={() => navigation.navigate("Quiz")}
+      />
+      <Appbar.Action
+        icon={require('../assets/images/iconHome.png')}
+        onPress={() => navigation.navigate("Home")}
+      />
+      <Appbar.Action
+        icon={require('../assets/images/iconRanking.png')}
+        onPress={() => navigation.navigate("Rank")}
+      />
+    </Appbar>
+    //</View>
   );
 }
 const styles = StyleSheet.create({
@@ -30,8 +30,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: '#6d17b0', // Roxo forte
+    backgroundColor: '#6d17b0',
     flex: 0.1,
+    borderRadius: 30,
   },
   bottom: {
     position: 'absolute',
@@ -40,5 +41,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'space-around',
     backgroundColor: '#6d17b0',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
 });
