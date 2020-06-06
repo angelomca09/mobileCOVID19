@@ -130,8 +130,8 @@ function Bottom(props) {
     { name: 'NewRecovered', caption: 'novos recuperados' },
     { name: 'TotalRecovered', caption: 'total recuperados' },
   ];
-  const date = new Date(props.info.Date).toLocaleDateString();
-
+  const dateArr = new Date(props.info.Date).toLocaleDateString().split("/");
+  const date = dateArr[1] + '/' + dateArr[0] + '/' + dateArr[2];
   return (
     <View style={styles.bottom}>
       <View style={styles.bottomTitle}>
@@ -141,11 +141,11 @@ function Bottom(props) {
             uri: 'https://cdn0.iconfinder.com/data/icons/virus-transmission-6/64/1-virus-512.png'
           }}
         />
-        <View style={{ flex: 1 }} >
-          <Text style={styles.title}>Situação da pandemia do COVID-19 no Brasil</Text>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.title}>Situação pandêmica do COVID-19 no Brasil</Text>
         </View>
       </View>
-      <View style={{ flex: 5 }}>
+      <View style={styles.bottomContent}>
         <Text style={styles.subtitle}>Atualizado em: {date}</Text>
         <Text style={styles.subtitle}>Referência: covid19api</Text>
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
@@ -158,6 +158,7 @@ function Bottom(props) {
                 <View style={styles.casoBox}>
                   <Text style={styles.casoValue}>{props.info[item.name]}</Text>
                   <Text style={styles.casoCaption}>{item.caption}</Text>
+                  <View style={styles.casoColor} />
                 </View>
               );
             }}
@@ -169,7 +170,9 @@ function Bottom(props) {
 }
 
 const darkPurple = '#6d17b0';
+const lightPurple = '#9967bf';
 const yellow = '#feee35';
+const lightGray = '#f2f0f5';
 const white = '#fafafa';
 const styles = StyleSheet.create({
   container: {
@@ -204,10 +207,10 @@ const styles = StyleSheet.create({
   heading: {
     color: white,
     fontSize: 22,
-    paddingLeft: 5,
+    paddingLeft: 10,
   },
   subHeading: {
-    color: '#feee35',
+    color: yellow,
     fontSize: 18,
     fontWeight: 'bold',
     paddingLeft: 10,
@@ -234,32 +237,46 @@ const styles = StyleSheet.create({
   bottomTitle: {
     flex: 1,
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: lightPurple,
     alignItems: 'center',
-    backgroundColor: yellow,
-    borderRadius: 10,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
     paddingHorizontal: 5,
   },
+  bottomContent: {
+    flex: 5,
+    backgroundColor: lightGray,
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
+  },
   title: {
-    color: darkPurple,
-    fontSize: 22,
+    color: white,
+    fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'left',
+    paddingLeft: 10
   },
   subtitle: {
     color: 'black',
     textAlign: 'right',
     fontSize: 12,
+    marginTop: 2,
     marginBottom: -2,
   },
   casoBox: {
     flex: 1,
     justifyContent: 'center',
     borderRadius: 15,
-    borderWidth: 1,
-    borderColor: darkPurple,
-    paddingVertical: 15,
+    //borderWidth: 1,
+    //borderColor: darkPurple,
+    paddingVertical: 20,
     paddingHorizontal: 5,
     margin: 5,
+  },
+  casoColor: {
+    height: 5,
+    backgroundColor: lightPurple
   },
   casoValue: {
     fontSize: 26,
@@ -273,6 +290,6 @@ const styles = StyleSheet.create({
   img: {
     height: 50,
     width: 50,
-    marginRight: 15,
+    marginHorizontal: 10,
   },
 });
