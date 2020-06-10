@@ -53,7 +53,6 @@ export default function HomeScreen({ navigation }) {
     findProfileInformation();
     fetchCases();
   }, []);
-
   return (
     <>
       <View style={styles.container}>
