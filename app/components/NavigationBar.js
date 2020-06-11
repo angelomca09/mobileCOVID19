@@ -10,16 +10,16 @@ export default function NavigationBar() {
     <View style={styles.footer}>
       <Appbar style={styles.bottom}>
         <Appbar.Action
-          icon={require('../assets/images/iconRanking.png')}
-          onPress={() => navigation.navigate("Rank")}
+          icon={require('../assets/images/iconQuiz.png')}
+          onPress={() => navigation.navigate("Quiz")}
         />
         <Appbar.Action
           icon={require('../assets/images/iconHome.png')}
           onPress={() => navigation.navigate("Home")}
         />
         <Appbar.Action
-          icon={require('../assets/images/iconQuiz.png')}
-          onPress={() => navigation.navigate("Quiz")}
+          icon={require('../assets/images/iconRanking.png')}
+          onPress={() => navigation.navigate("Rank")}
         />
       </Appbar>
     </View>
@@ -27,11 +27,8 @@ export default function NavigationBar() {
 }
 const styles = StyleSheet.create({
   footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    backgroundColor: '#6d17b0', // Roxo forte
-    flex: 0.1,
+    flex: 0.08,
+    backgroundColor: '#fafafa',
   },
   bottom: {
     position: 'absolute',
@@ -40,5 +37,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'space-around',
     backgroundColor: '#6d17b0',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
 });
