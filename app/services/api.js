@@ -8,12 +8,8 @@ const api = axios.create({
 });
 
 export async function registerNewUserRequest(data) {
-  let res = await api.post(c.USERS, data);
-  return res;
-}
-export async function loginRequest(data) {
   //Cria usuário
-  let res = await api.post(c.LOGIN, data)
+  let res = await api.post(c.USERS, data);
   //Recebe o Token
   await getToken({
     "username": data.username,
@@ -30,6 +26,10 @@ export async function loginRequest(data) {
     Alert.alert("Erro ao registrar novo profile")
     console.log('Error', err)
   }
+  return res;
+}
+export async function loginRequest(data) {
+  let res = await api.post(c.LOGIN, data)
   return res;
 }
 
