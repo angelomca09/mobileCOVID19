@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, FlatList, Text, StyleSheet } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { getRanking } from '../services/api';
-import { getUserInformation } from '../services/api';
+import { getUserInformation, getProfile } from '../services/api';
 
 export default function ScreenRanking() {
 
@@ -21,6 +21,11 @@ export default function ScreenRanking() {
         try {
             let userInfo = await getUserInformation()
             let username = userInfo.username
+            let points = await getProfile()
+            let Myinfo = {
+                name: username,
+                points: points
+            }
 
             let ranking = await getRanking();
             var result = [];
@@ -28,12 +33,7 @@ export default function ScreenRanking() {
             for (var i in ranking) {
 
                 if ((ranking[i]).user === username) {
-                    let Myinfo = {
-                        name: username,
-                        points: (ranking[i]).points,
-                        position: parseInt(i) + 1
-                    }
-                    setMyUser(Myinfo);
+                    Myinfo.position = parseInt(i) + 1
                 }
 
                 let params = {
@@ -43,6 +43,7 @@ export default function ScreenRanking() {
                 }
                 result.push(params);
             }
+            setMyUser(Myinfo);
             setUsers(result);
 
         } catch (err) {
