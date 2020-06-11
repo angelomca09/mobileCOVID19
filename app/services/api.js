@@ -12,29 +12,46 @@ export async function registerNewUserRequest(data) {
   return res;
 }
 export async function loginRequest(data) {
-  let res = await api.post(c.LOGIN, data);
+  //Cria usuário
+  let res = await api.post(c.LOGIN, data)
+  //Recebe o Token
+  await getToken({
+    "username": data.username,
+    "password": data.password
+  });
+  //Cria o Perfil do usuário
+  try {
+    await createProfile({
+      "address": 'address',
+      'coordinate_x': '54544654',
+      'coordinate_y': '45454545'
+    })
+  } catch (err) {
+    Alert.alert("Erro ao registrar novo profile")
+    console.log('Error', err)
+  }
   return res;
 }
 
-export async function createProfile(data){
+export async function createProfile(data) {
 
   var aut = await getToken();
-  
-  return fetch(c.API_URL+c.PROFILE, {
-  method: 'POST',
-  headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-    'Authorization': aut
-  },
-  body : JSON.stringify(data),
+
+  return fetch(c.API_URL + c.PROFILE, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': aut
+    },
+    body: JSON.stringify(data),
   }).then((response) => response.json())
-  .then((json) => {
-    return json;
-  })
-  .catch((error) => {
-    console.error(error);
-  });
+    .then((json) => {
+      return json;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 
 }
 
@@ -86,20 +103,20 @@ export async function getUserInformation() {
 export async function getRanking() {
 
   var aut = await getToken();
- return  fetch(c.API_URL+c.RANKING, {
-  method: 'Get',
-  headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-    'Authorization': aut
-  },
+  return fetch(c.API_URL + c.RANKING, {
+    method: 'Get',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': aut
+    },
   }).then((response) => response.json())
-  .then((json) => {
-    return json.results;
-  })
-  .catch((error) => {
-    console.error(error);
-  });
+    .then((json) => {
+      return json.results;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 }
 
 async function getToken() {
