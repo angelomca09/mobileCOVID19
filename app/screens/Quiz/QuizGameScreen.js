@@ -47,7 +47,7 @@ export default function Quiz({ navigation }) {
     return (
       <View style={styles.popup}>
         <Text style={styles.popupText}>
-          Carregando, aguarde ... 
+          Carregando, aguarde ...
         </Text>
       </View>
     )
@@ -137,7 +137,10 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   card: {
-    backgroundColor: "darkgrey",
+    borderRadius: 15,
+    borderWidth: 4,
+    backgroundColor: "#f0dcff",
+    borderColor: "#6d17b0",
     width: '90%',
     padding: 5,
     borderRadius: 15
@@ -156,7 +159,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 14,
-    color: "white",
+    color: "#6d17b0",
     textAlign: "center"
   },
   footerBar: {
