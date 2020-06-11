@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   },
   textBox: {
     flex: 1,
-    padding: 5,
+    paddingVertical: 30,
     justifyContent: 'center',
   },
   text: {
