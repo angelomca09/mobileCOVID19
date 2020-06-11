@@ -13,7 +13,8 @@ import { Avatar } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import * as yup from 'yup';
 import { Formik } from 'formik';
-import { registerUser } from '../providers/auth';
+import { registerUser, getToken } from '../providers/auth';
+import { createProfile } from '../services/api'
 
 export default function SignUpScreen() {
     const navigation = useNavigation();
@@ -27,6 +28,11 @@ export default function SignUpScreen() {
                 "email": userInfo.email,
                 "password": userInfo.password
             });
+            await getToken({
+                "username": userInfo.username,
+                "password": userInfo.password
+            });
+            await createProfile()
             navigation.navigate("Login");
         } catch (err) {
             Alert.alert("Erro ao registrar novo usuário");
