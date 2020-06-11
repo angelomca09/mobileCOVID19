@@ -8,32 +8,21 @@ const api = axios.create({
 });
 
 export async function registerNewUserRequest(data) {
-  //Cria usuário
   let res = await api.post(c.USERS, data);
-  //Recebe o Token
-  await getToken({
-    "username": data.username,
-    "password": data.password
-  });
-  //Cria o Perfil do usuário
-  try {
-    await createProfile({
-      "address": 'address',
-      'coordinate_x': '54544654',
-      'coordinate_y': '45454545'
-    })
-  } catch (err) {
-    Alert.alert("Erro ao registrar novo profile")
-    console.log('Error', err)
-  }
-  return 
+  return res;
 }
 export async function loginRequest(data) {
   let res = await api.post(c.LOGIN, data)
   return res;
 }
 
-export async function createProfile(data) {
+export async function createProfile() {
+
+  var data = {
+    address: 'address',
+    coordinate_x: '54544654',
+    coordinate_y: '45454545'
+  }
 
   var aut = await getToken();
 
