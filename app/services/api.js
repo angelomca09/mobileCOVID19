@@ -26,7 +26,7 @@ export async function registerNewUserRequest(data) {
     Alert.alert("Erro ao registrar novo profile")
     console.log('Error', err)
   }
-  return res;
+  return 
 }
 export async function loginRequest(data) {
   let res = await api.post(c.LOGIN, data)
