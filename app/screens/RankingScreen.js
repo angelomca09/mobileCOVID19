@@ -94,7 +94,7 @@ function Header({ user }) {
             <View style={{ justifyContent: "center" }}>
                 <Text style={styles.heading}>Pontos</Text>
                 <View style={{ flexDirection: 'row', justifyContent: "center", marginVertical: 10 }}>
-                    {user.points && <Text style={styles.subHeading}>{user.points}</Text>}
+                    <Text style={styles.subHeading}>{user.points ? user.points : "-"}</Text>
                 </View>
             </View>
 
