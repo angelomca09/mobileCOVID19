@@ -76,7 +76,7 @@ function Header({ user }) {
             <View style={{ justifyContent: "center" }}>
                 <Text style={styles.heading}>Posição</Text>
                 <View style={{ flexDirection: 'row', justifyContent: "center", marginVertical: 10 }}>
-                    {user.position && <Text style={styles.subHeading}>{user.position}</Text>}
+                    <Text style={styles.subHeading}>{user.position ? user.position : "-"}</Text>
                 </View>
             </View>
             <View style={{ justifyContent: "center" }}>
