@@ -30,7 +30,7 @@ export default function HomeScreen({ navigation }) {
         points: await getProfile(),
         name: userinfo.first_name,
         lastname: userinfo.last_name,
-        avatar: require('../assets/images/snack-icon.png')
+        avatar: require('../assets/images/warning.png')
       }
       setUser(params);
     } catch (err) {

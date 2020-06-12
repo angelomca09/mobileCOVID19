@@ -83,7 +83,7 @@ function Header({ user }) {
                 <Avatar
                     size="large"
                     rounded
-                    source={require('../assets/images/snack-icon.png')}
+                    source={require('../assets/images/warning.png')}
                 />
                 <View style={{ flexDirection: 'row', justifyContent: "center", marginVertical: 10 }}>
                     {user.name && <Text style={styles.heading}>{user.name}</Text>}

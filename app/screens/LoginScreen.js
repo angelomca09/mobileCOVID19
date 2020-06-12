@@ -27,7 +27,7 @@ export default function Login({ navigation }) {
           <View style={styles.container}>
             <Image
               style={styles.logo}
-              source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/7/76/Slack_Icon.png' }}
+              source={require('../assets/images/virus.png')}
             />
             <View style={styles.inputView}>
               <Text style={styles.error}>{error}</Text>

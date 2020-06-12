@@ -1,6 +1,7 @@
 import React from 'react';
 import {
     View,
+    Image,
     Text,
     TouchableOpacity,
     TextInput,
@@ -9,7 +10,6 @@ import {
     ScrollView,
     Alert
 } from 'react-native';
-import { Avatar } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import * as yup from 'yup';
 import { Formik } from 'formik';
@@ -47,9 +47,9 @@ export default function SignUpScreen() {
         <SafeAreaView style={styles.container}>
             <ScrollView style={styles.scrollView}>
                 <View style={styles.box}>
-                    <Avatar
-                        size="large"
-                        source={require('../assets/images/heart-icon.jpeg')}
+                    <Image
+                        style={styles.logo}
+                        source={require('../assets/images/person.png')}
                     />
                     <Text style={{ fontSize: 30, paddingTop: 10 }}>Criar conta</Text>
                     <Formik
@@ -193,5 +193,9 @@ const styles = StyleSheet.create({
     buttonText: {
         fontWeight: 'bold',
         color: 'black'
+    },
+    logo: {
+        height: 70,
+        width: 70,
     },
 });
