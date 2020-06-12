@@ -24,7 +24,8 @@ export default function ScreenRanking() {
             let points = await getProfile()
             let Myinfo = {
                 name: username,
-                points: points
+                points: points,
+                position: false
             }
 
             let ranking = await getRanking();
