@@ -2,51 +2,50 @@ import React, { useState, useEffect } from 'react';
 import { View, FlatList, Text, StyleSheet } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { getRanking } from '../services/api';
-import { getUserInformation } from '../services/api';
+import { getUserInformation, getProfile } from '../services/api';
 
 export default function ScreenRanking() {
 
-    const [users, setUser] = useState([])
-    const [username, setUserame] = useState("")
+    const [users, setUsers] = useState([])
     const [myUser, setMyUser] = useState([])
 
-   
 
-    useEffect(function(){
+
+    useEffect(function () {
         updateRanking();
     }, [])
 
-        
+
 
     async function updateRanking() {
         try {
-            setUserame((await getUserInformation()).username);
+            let userInfo = await getUserInformation()
+            let username = userInfo.username
+            let points = await getProfile()
+            let Myinfo = {
+                name: username,
+                points: points
+            }
+
             let ranking = await getRanking();
             var result = [];
 
-            for(var i in ranking){
+            for (var i in ranking) {
 
-                if( (ranking [i]).user === username){
-                    let Myinfo = {
-                        name : username,
-                        points : (ranking [i]).points,
-                        position : parseInt(i)+1
-                    }
-                    setMyUser(Myinfo);
-
+                if ((ranking[i]).user === username) {
+                    Myinfo.position = parseInt(i) + 1
                 }
 
                 let params = {
                     id: i,
-                    name: (ranking [i]).user,
-                    points: (ranking [i]).points,
-                  }
+                    name: (ranking[i]).user,
+                    points: (ranking[i]).points,
+                }
                 result.push(params);
             }
+            setMyUser(Myinfo);
+            setUsers(result);
 
-            setUser(result);
-           
-            
         } catch (err) {
 
             Alert.alert("Erro ao buscar ranking")
@@ -54,7 +53,7 @@ export default function ScreenRanking() {
 
         }
     }
-   
+
 
     return (
         <>
@@ -62,7 +61,7 @@ export default function ScreenRanking() {
             <View style={styles.container}>
                 <FlatList
                     data={users}
-                    renderItem={({ item }) => <ListTile name={item.name} points={item.points} position={users.indexOf(item) + 1}/>}
+                    renderItem={({ item }) => <ListTile name={item.name} points={item.points} position={users.indexOf(item) + 1} />}
                     keyExtractor={item => item.id}
                 />
             </View>
@@ -76,7 +75,7 @@ function Header({ user }) {
             <View style={{ justifyContent: "center" }}>
                 <Text style={styles.heading}>Posição</Text>
                 <View style={{ flexDirection: 'row', justifyContent: "center", marginVertical: 10 }}>
-    <Text style={styles.subHeading}>{user.position}</Text>
+                    {user.position && <Text style={styles.subHeading}>{user.position}</Text>}
                 </View>
             </View>
             <View style={{ justifyContent: "center" }}>
@@ -86,7 +85,7 @@ function Header({ user }) {
                     source={require('../assets/images/snack-icon.png')}
                 />
                 <View style={{ flexDirection: 'row', justifyContent: "center", marginVertical: 10 }}>
-                    <Text style={styles.heading}>{user.name}</Text>
+                    {user.name && <Text style={styles.heading}>{user.name}</Text>}
                 </View>
 
             </View>
@@ -94,7 +93,7 @@ function Header({ user }) {
             <View style={{ justifyContent: "center" }}>
                 <Text style={styles.heading}>Pontos</Text>
                 <View style={{ flexDirection: 'row', justifyContent: "center", marginVertical: 10 }}>
-                    <Text style={styles.subHeading}>{user.points}</Text>
+                    {user.points && <Text style={styles.subHeading}>{user.points}</Text>}
                 </View>
             </View>
 
@@ -112,15 +111,15 @@ function ListTile({ name, points, position }) {
     );
 }
 
-function sortList(list){
+function sortList(list) {
     //sort and reverse
     list = list.sort((a, b) => {
         if (a.points < b.points)
-          return -1;
+            return -1;
         if (a.points > b.points)
-          return 1;
+            return 1;
         return 0;
-      })
+    })
     list.reverse()
 
     return list
